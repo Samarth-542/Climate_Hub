@@ -15,14 +15,24 @@ export default function Login() {
 
   const [step, setStep] = useState('PHONE'); // PHONE | OTP
   const [loading, setLoading] = useState(false);
+  const [timer, setTimer] = useState(0); 
   
   // Data
   const [formData, setFormData] = useState({ name: '', phone: '' });
   const [otpInput, setOtpInput] = useState('');
   const [generatedOtp, setGeneratedOtp] = useState(null);
 
+  // Handle Countdown
+  React.useEffect(() => {
+    let interval;
+    if (timer > 0) {
+        interval = setInterval(() => setTimer(t => t - 1), 1000);
+    }
+    return () => clearInterval(interval);
+  }, [timer]);
+
   const handleRequestOTP = async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     if (formData.phone.length < 10) {
         addToast("Please enter a valid phone number.", "error");
         return;
@@ -32,11 +42,13 @@ export default function Login() {
     try {
         const otp = await requestOTP(formData.phone);
         setGeneratedOtp(otp);
-        alert(`Your Mock OTP is: ${otp}`); // DEMO PURPOSE
+        alert(`Your Mock OTP is: ${otp}`); 
+        
         setStep('OTP');
+        setTimer(30); 
         addToast(`OTP Sent to ${formData.phone}`, "success");
     } catch (err) {
-        addToast("Failed to send OTP", "error");
+        addToast("Failed to request OTP", "error");
     } finally {
         setLoading(false);
     }
@@ -91,7 +103,7 @@ export default function Login() {
                                 type="tel"
                                 required
                                 className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none"
-                                placeholder="1234567890"
+                                placeholder="+91 9876543210"
                                 value={formData.phone}
                                 onChange={e => setFormData({...formData, phone: e.target.value})}
                             />
@@ -132,19 +144,37 @@ export default function Login() {
                     </div>
 
                     <button 
-                        type="submit" 
-                        className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold transition shadow-lg shadow-emerald-900/20"
+                        type="submit"
+                        disabled={loading}
+                        className={clsx(
+                            "w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold transition shadow-lg shadow-emerald-900/20",
+                            loading && "opacity-50"
+                        )}
                     >
-                        Verify & Login
+                        {loading ? "Verifying..." : "Verify & Login"}
                     </button>
 
-                    <button 
-                        type="button"
-                        onClick={() => setStep('PHONE')}
-                        className="w-full text-slate-500 text-sm hover:text-slate-300"
-                    >
-                        Change Phone Number
-                    </button>
+                    <div className="flex flex-col gap-2">
+                        <button 
+                            type="button"
+                            disabled={timer > 0 || loading}
+                            onClick={() => handleRequestOTP()}
+                            className={clsx(
+                                "w-full text-sm font-medium",
+                                timer > 0 ? "text-slate-600" : "text-emerald-500 hover:text-emerald-400"
+                            )}
+                        >
+                            {timer > 0 ? `Resend OTP in ${timer}s` : "Resend OTP"}
+                        </button>
+
+                        <button 
+                            type="button"
+                            onClick={() => setStep('PHONE')}
+                            className="w-full text-slate-500 text-sm hover:text-slate-300"
+                        >
+                            Change Phone Number
+                        </button>
+                    </div>
                 </form>
             )}
         </div>

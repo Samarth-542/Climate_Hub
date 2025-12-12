@@ -22,19 +22,19 @@ function MapController({ focusIncident }) {
 // Remove default icon configuration as we are using custom divIcons
 // delete L.Icon.Default.prototype._getIconUrl;
 
-const getMarkerIcon = (type) => {
+const getMarkerIcon = (severity) => {
   const colors = {
-    Flood: "#ef4444",     // red-500
-    Drought: "#a16207",   // yellow-700/brownish
-    Heatwave: "#eab308",  // yellow-500
-    Wildfire: "#f97316",  // orange-500
-    Other: "#64748b",     // slate-500
+    Critical: "#ef4444",   // red-500
+    High: "#f97316",       // orange-500
+    Medium: "#eab308",     // yellow-500
+    Low: "#22c55e",        // green-500
+    Other: "#64748b",      // slate-500
   };
 
-  const color = colors[type] || colors.Other;
+  const color = colors[severity] || colors.Other;
 
   const iconMarkup = renderToStaticMarkup(
-    <div className="relative flex items-center justify-center w-8 h-8 -ml-4 -mt-8">
+    <div className="relative flex items-center justify-center w-8 h-8">
        {/* SVG Pin */}
        <svg 
          xmlns="http://www.w3.org/2000/svg" 
@@ -84,7 +84,7 @@ export default function ClimateMap({ incidents, focusIncident }) {
         <MapController focusIncident={focusIncident} />
 
         {incidents.map((i) => (
-          <Marker key={i.id} position={[i.lat, i.lng]} icon={getMarkerIcon(i.type)}>
+          <Marker key={i.id} position={[i.lat, i.lng]} icon={getMarkerIcon(i.severity)}>
             <Popup className="min-w-[200px] leaflet-dark-popup">
               <div className="flex flex-col gap-2 p-1">
                 <div className="flex justify-between items-center">

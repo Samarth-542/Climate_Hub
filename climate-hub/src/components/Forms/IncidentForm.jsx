@@ -14,6 +14,7 @@ export default function IncidentForm() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     type: 'Flood',
+    severity: 'Medium',
     description: '',
     photo: '',
   });
@@ -55,22 +56,39 @@ export default function IncidentForm() {
         
         <form onSubmit={handleSubmit} className="space-y-6">
             
-            {/* Type */}
-            <div>
-                <label className="block text-sm font-semibold text-slate-300 mb-2">Incident Type</label>
-                <select 
-                    className="w-full p-3 bg-slate-800 border border-slate-700 text-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
-                    value={formData.type}
-                    onChange={e => setFormData({...formData, type: e.target.value})}
-                >
-                    <option value="Flood">Flood</option>
-                    <option value="Drought">Drought</option>
-                    <option value="Heatwave">Heatwave</option>
-                    <option value="Wildfire">Wildfire</option>
-                    <option value="Air Quality">Air Quality</option>
-                    <option value="Storm">Storm</option>
-                    <option value="Other">Other</option>
-                </select>
+            <div className="grid grid-cols-2 gap-4">
+                {/* Type */}
+                <div>
+                    <label className="block text-sm font-semibold text-slate-300 mb-2">Incident Type</label>
+                    <select 
+                        className="w-full p-3 bg-slate-800 border border-slate-700 text-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                        value={formData.type}
+                        onChange={e => setFormData({...formData, type: e.target.value})}
+                    >
+                        <option value="Flood">Flood</option>
+                        <option value="Drought">Drought</option>
+                        <option value="Heatwave">Heatwave</option>
+                        <option value="Wildfire">Wildfire</option>
+                        <option value="Air Quality">Air Quality</option>
+                        <option value="Storm">Storm</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                {/* Severity */}
+                <div>
+                    <label className="block text-sm font-semibold text-slate-300 mb-2">Severity</label>
+                    <select 
+                        className="w-full p-3 bg-slate-800 border border-slate-700 text-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                        value={formData.severity}
+                        onChange={e => setFormData({...formData, severity: e.target.value})}
+                    >
+                        <option value="Critical">Critical</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
             </div>
 
             {/* Description */}

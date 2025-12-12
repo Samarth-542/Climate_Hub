@@ -9,22 +9,40 @@ export function IncidentProvider({ children }) {
   const [filters, setFilters] = useState({ type: 'All', date: 'All' });
   const [loading, setLoading] = useState(true);
 
-  // Load initial data
+  // Load initial data from Backend
   useEffect(() => {
-    incidentStore.seed();
-    const data = incidentStore.getAll();
-    setIncidents(data);
-    setLoading(false);
+    const fetchIncidents = async () => {
+        try {
+            const res = await fetch('http://localhost:3000/incidents');
+            const data = await res.json();
+            setIncidents(data);
+        } catch (e) {
+            console.error("Failed to load incidents", e);
+        } finally {
+            setLoading(false);
+        }
+    };
+    fetchIncidents();
   }, []);
 
-  const addIncident = (newIncident) => {
-    const saved = incidentStore.add(newIncident);
-    setIncidents((prev) => [saved, ...prev]);
-    return saved;
+  const addIncident = async (newIncident) => {
+    try {
+        const res = await fetch('http://localhost:3000/incidents', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newIncident)
+        });
+        const saved = await res.json();
+        setIncidents((prev) => [saved, ...prev]);
+        return saved;
+    } catch (e) {
+        console.error("Failed to add incident", e);
+        throw e;
+    }
   };
 
   const deleteIncident = (id) => {
-    incidentStore.remove(id);
+    // Optimistic update for UI. Reverting handled by refresh on error in real app.
     setIncidents(prev => prev.filter(i => i.id !== id));
   };
 
