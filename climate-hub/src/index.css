@@ -2,11 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  background-color: #0f172a;
+  /* Slate 900 */
+  color: #f8fafc;
+  /* Slate 50 */
+}
 
-html,
-body,
-#root {
-  height: 100%;
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #0f172a;
 }
 
 .leaflet-container {

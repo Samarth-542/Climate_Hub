@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../UI/ToastContext';
 import LocationPicker from './LocationPicker';
-import { incidentStore } from '../../services/incidentStore';
+import { useIncidents } from '../../context/IncidentContext';
 import { ArrowLeft, Send, Camera } from 'lucide-react';
 import clsx from 'clsx';
 
 export default function IncidentForm() {
   const navigate = useNavigate();
   const { addToast } = useToast();
+  const { addIncident } = useIncidents();
   
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -32,7 +33,7 @@ export default function IncidentForm() {
     setLoading(true);
     // Simulate network delay
     setTimeout(() => {
-        incidentStore.add({
+        addIncident({
             ...formData,
             lat: location.lat,
             lng: location.lng
@@ -45,20 +46,20 @@ export default function IncidentForm() {
 
   return (
     <div className="max-w-2xl mx-auto p-4 md:p-8">
-      <button onClick={() => navigate(-1)} className="flex items-center text-slate-500 hover:text-slate-800 mb-6 transition">
+      <button onClick={() => navigate(-1)} className="flex items-center text-slate-400 hover:text-slate-200 mb-6 transition">
         <ArrowLeft size={18} className="mr-1" /> Back
       </button>
 
-      <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-6 md:p-8">
-        <h2 className="text-2xl font-bold text-slate-800 mb-6">Report Climate Incident</h2>
+      <div className="bg-slate-900 rounded-2xl shadow-xl border border-slate-800 p-6 md:p-8">
+        <h2 className="text-2xl font-bold text-slate-100 mb-6">Report Climate Incident</h2>
         
         <form onSubmit={handleSubmit} className="space-y-6">
             
             {/* Type */}
             <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">Incident Type</label>
+                <label className="block text-sm font-semibold text-slate-300 mb-2">Incident Type</label>
                 <select 
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                    className="w-full p-3 bg-slate-800 border border-slate-700 text-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
                     value={formData.type}
                     onChange={e => setFormData({...formData, type: e.target.value})}
                 >
@@ -74,9 +75,9 @@ export default function IncidentForm() {
 
             {/* Description */}
             <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">Description</label>
+                <label className="block text-sm font-semibold text-slate-300 mb-2">Description</label>
                 <textarea 
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none h-32 resize-none"
+                    className="w-full p-3 bg-slate-800 border border-slate-700 text-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none h-32 resize-none placeholder:text-slate-500"
                     placeholder="Describe the incident (location details, severity, etc.)"
                     value={formData.description}
                     onChange={e => setFormData({...formData, description: e.target.value})}
@@ -85,10 +86,10 @@ export default function IncidentForm() {
 
             {/* Location */}
             <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">Location (Tap to select)</label>
+                <label className="block text-sm font-semibold text-slate-300 mb-2">Location (Tap to select)</label>
                 <LocationPicker position={location} setPosition={setLocation} />
                 {location && (
-                    <p className="text-xs text-emerald-600 mt-2 font-medium">
+                    <p className="text-xs text-emerald-400 mt-2 font-medium">
                         Location selected: {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
                     </p>
                 )}
@@ -96,14 +97,14 @@ export default function IncidentForm() {
 
             {/* Photo Upload */}
             <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">Photo Evidence</label>
+                <label className="block text-sm font-semibold text-slate-300 mb-2">Photo Evidence</label>
                 
                 <div className="flex items-center gap-4">
                     <label className="flex-1 cursor-pointer group">
-                        <div className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-lg group-hover:border-emerald-500 group-hover:bg-emerald-50 transition">
+                        <div className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-700 rounded-lg group-hover:border-emerald-500 group-hover:bg-slate-800 transition">
                             <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                <Camera className="w-8 h-8 text-slate-400 group-hover:text-emerald-500 mb-2" />
-                                <p className="text-sm text-slate-500 group-hover:text-emerald-600">Click to upload image</p>
+                                <Camera className="w-8 h-8 text-slate-500 group-hover:text-emerald-500 mb-2" />
+                                <p className="text-sm text-slate-400 group-hover:text-emerald-400">Click to upload image</p>
                             </div>
                         </div>
                         <input 
@@ -128,7 +129,7 @@ export default function IncidentForm() {
                             <img 
                                 src={formData.photo} 
                                 alt="Preview" 
-                                className="w-full h-full object-cover rounded-lg shadow-md border border-slate-200"
+                                className="w-full h-full object-cover rounded-lg shadow-md border border-slate-700"
                             />
                             <button
                                 type="button"
@@ -146,8 +147,8 @@ export default function IncidentForm() {
                 type="submit" 
                 disabled={loading}
                 className={clsx(
-                    "w-full py-4 rounded-xl text-white font-bold text-lg flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-500/30",
-                    loading ? "bg-slate-400 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-700 hover:scale-[1.01]"
+                    "w-full py-4 rounded-xl text-white font-bold text-lg flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-900/40",
+                    loading ? "bg-slate-700 cursor-not-allowed text-slate-400" : "bg-emerald-600 hover:bg-emerald-500 hover:scale-[1.01]"
                 )}
             >
                 {loading ? "Submitting..." : (

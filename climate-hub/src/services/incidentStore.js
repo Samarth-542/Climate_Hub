@@ -24,6 +24,12 @@ export const incidentStore = {
     return newIncident;
   },
 
+  remove: (id) => {
+    const current = incidentStore.getAll();
+    const updated = current.filter(item => item.id !== id);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+  },
+
   seed: () => {
     if (!localStorage.getItem(STORAGE_KEY)) {
       const dummies = [

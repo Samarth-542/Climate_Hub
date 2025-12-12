@@ -35,10 +35,18 @@ export default function LocationPicker({ position, setPosition, initialCenter = 
 
   return (
     <div className="relative h-64 w-full rounded-lg overflow-hidden border border-slate-300">
-      <MapContainer center={initialCenter} zoom={2} className="h-full w-full">
+      <MapContainer 
+        center={initialCenter} 
+        zoom={2} 
+        minZoom={2}
+        maxBounds={[[-90, -180], [90, 180]]}
+        maxBoundsViscosity={1.0}
+        className="h-full w-full bg-slate-900"
+      >
         <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            noWrap={true}
         />
         <LocationMarker position={position} setPosition={setPosition} />
       </MapContainer>

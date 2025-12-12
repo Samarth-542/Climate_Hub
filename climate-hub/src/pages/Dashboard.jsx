@@ -1,57 +1,41 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Plus } from "lucide-react";
 import ClimateMap from "../components/Map/ClimateMap";
 import FilterBar from "../components/Dashboard/FilterBar";
-import { incidentStore } from "../services/incidentStore";
-import { isAfter, subHours, subDays, startOfDay } from "date-fns";
+import LiveFeed from "../components/Dashboard/LiveFeed";
+import { useIncidents } from "../context/IncidentContext";
 
 export default function Dashboard() {
-  const [incidents, setIncidents] = useState([]);
-  const [filters, setFilters] = useState({ type: "All", date: "All" });
+  const { filteredIncidents, filters, setFilters } = useIncidents();
+  const [mapFocus, setMapFocus] = useState(null);
 
-  useEffect(() => {
-    setIncidents(incidentStore.getAll());
-  }, []);
-
-  const filteredIncidents = useMemo(() => {
-    return incidents.filter((item) => {
-      const itemDate = new Date(item.timestamp);
-
-      if (filters.type !== "All" && item.type !== filters.type) return false;
-
-      if (filters.date === "Today") {
-        if (!isAfter(itemDate, startOfDay(new Date()))) return false;
-      } else if (filters.date === "24h") {
-        if (!isAfter(itemDate, subHours(new Date(), 24))) return false;
-      } else if (filters.date === "7d") {
-        if (!isAfter(itemDate, subDays(new Date(), 7))) return false;
-      }
-
-      return true;
-    });
-  }, [incidents, filters]);
+  const handleViewOnMap = (incident) => {
+    setMapFocus(incident);
+  };
 
   return (
-    <div className="flex flex-col h-full w-full relative overflow-hidden">
+    <div className="flex h-full w-full relative overflow-hidden">
       
-      {/* Filters */}
-      <div className="z-[500] pointer-events-none">
-        <FilterBar filters={filters} setFilters={setFilters} />
+      {/* Center Panel (Map) - Grows to fill available space */}
+      <div className="flex-1 relative h-full">
+         <div className="z-[500] pointer-events-none absolute inset-0">
+            <FilterBar filters={filters} setFilters={setFilters} />
+         </div>
+         <ClimateMap incidents={filteredIncidents} focusIncident={mapFocus} />
+
+        {/* Floating Report Button */}
+        <Link
+            to="/report"
+            className="absolute bottom-6 right-6 z-[600] bg-emerald-500 hover:bg-emerald-400 text-white p-4 rounded-full shadow-lg shadow-emerald-900/40 transition-transform hover:scale-105 active:scale-95 flex items-center justify-center border border-emerald-400/20"
+        >
+            <Plus size={32} />
+        </Link>
       </div>
 
-      {/* Map takes ALL remaining vertical space */}
-      <div className="flex-1 min-h-0 w-full h-full">
-        <ClimateMap incidents={filteredIncidents} />
-      </div>
+      {/* Right Panel (Live Feed) - Fixed width */}
+      <LiveFeed onViewOnMap={handleViewOnMap} />
 
-      {/* Floating button */}
-      <Link
-        to="/report"
-        className="absolute bottom-6 right-6 z-[600] bg-emerald-600 hover:bg-emerald-500 text-white p-4 rounded-full shadow-lg shadow-emerald-600/30 transition-transform hover:scale-105 active:scale-95 flex items-center justify-center"
-      >
-        <Plus size={32} />
-      </Link>
     </div>
   );
 }
