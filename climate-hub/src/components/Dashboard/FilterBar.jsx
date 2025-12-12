@@ -5,7 +5,9 @@ export default function FilterBar({ filters, setFilters }) {
   // Local state for pending filters
   const [localFilters, setLocalFilters] = useState({
     type: filters.type,
-    date: filters.date
+    date: filters.date,
+    state: filters.state || '',
+    district: filters.district || ''
   });
 
   const handleChange = (key, value) => {
@@ -13,7 +15,13 @@ export default function FilterBar({ filters, setFilters }) {
   };
 
   const applyFilters = () => {
-    setFilters(prev => ({ ...prev, type: localFilters.type, date: localFilters.date }));
+    setFilters(prev => ({ 
+        ...prev, 
+        type: localFilters.type, 
+        date: localFilters.date,
+        state: localFilters.state,
+        district: localFilters.district
+    }));
   };
 
   return (
@@ -38,6 +46,32 @@ export default function FilterBar({ filters, setFilters }) {
             <option value="Air Quality">Air Quality</option>
             <option value="Storm">Storm</option>
             <option value="Other">Other</option>
+          </select>
+
+import { statesAndDistricts } from '../../data/statesAndDistricts';
+
+// ... (in component)
+          <select 
+            className="bg-slate-800 border-none text-slate-200 text-sm rounded-lg focus:ring-2 focus:ring-emerald-500 block p-2 outline-none cursor-pointer hover:bg-slate-700 transition-colors"
+            value={localFilters.state || ''}
+            onChange={(e) => handleChange('state', e.target.value)}
+          >
+            <option value="">All States</option>
+            {Object.keys(statesAndDistricts).sort().map(s => (
+                <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
+
+          <select 
+            className="bg-slate-800 border-none text-slate-200 text-sm rounded-lg focus:ring-2 focus:ring-emerald-500 block p-2 outline-none cursor-pointer hover:bg-slate-700 transition-colors disabled:opacity-50"
+            value={localFilters.district || ''}
+            onChange={(e) => handleChange('district', e.target.value)}
+            disabled={!localFilters.state}
+          >
+            <option value="">All Districts</option>
+            {localFilters.state && statesAndDistricts[localFilters.state]?.sort().map(d => (
+                <option key={d} value={d}>{d}</option>
+            ))}
           </select>
 
           <select 

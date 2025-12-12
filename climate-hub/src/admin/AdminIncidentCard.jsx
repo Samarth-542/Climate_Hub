@@ -25,12 +25,12 @@ export default function AdminIncidentCard({ incident, onResolve, onDelete }) {
       borderRadius={12}
       borderWidth={2}
       duration={10}
-      className="w-full min-w-0 p-0 bg-slate-800 dark:bg-slate-800"
+      className="w-full min-w-0 p-0 bg-[#0a0a0a]/70 dark:bg-[#0a0a0a]/70"
     >
-      <div className={clsx("text-slate-200 rounded-xl overflow-hidden", isResolved ? "bg-emerald-900/10" : "bg-slate-800")}>
+      <div className={clsx("text-gray-200 rounded-xl overflow-hidden backdrop-blur-sm", isResolved ? "bg-emerald-900/20" : "bg-[#0a0a0a]/70")}>
         <div className="flex h-full">
           {/* Mini Map Preview */}
-          <div className="w-48 h-full flex-none relative bg-slate-900 hidden sm:block grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition duration-500">
+          <div className="w-48 h-full flex-none relative bg-[#000000] hidden sm:block grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition duration-500">
               <MapContainer 
                   center={[incident.lat, incident.lng]} 
                   zoom={13} 
@@ -56,7 +56,7 @@ export default function AdminIncidentCard({ incident, onResolve, onDelete }) {
                        })}>
                           {incident.severity} {incident.type}
                        </span>
-                       <h3 className="text-lg font-bold mt-2 line-clamp-1 text-slate-100">{incident.description}</h3>
+                       <h3 className="text-lg font-bold mt-2 line-clamp-1 text-white">{incident.description}</h3>
                   </div>
                   {isResolved && (
                       <span className="flex items-center gap-1 text-emerald-400 font-bold text-xs bg-emerald-900/30 px-2 py-1 rounded-full border border-emerald-900/50">
@@ -65,7 +65,7 @@ export default function AdminIncidentCard({ incident, onResolve, onDelete }) {
                   )}
               </div>
 
-              <div className="flex gap-4 text-xs text-slate-500">
+              <div className="flex gap-4 text-xs text-gray-500">
                   <div className="flex items-center gap-1">
                       <User size={14} />
                       {incident.reportedBy || 'Anonymous'}
@@ -80,10 +80,10 @@ export default function AdminIncidentCard({ incident, onResolve, onDelete }) {
                   </div>
               </div>
 
-              <div className="flex items-center gap-1 text-xs text-slate-400 font-mono bg-slate-900/50 p-1.5 rounded border border-slate-700/50 w-fit">
+              <div className="flex items-center gap-1 text-xs text-gray-400 font-mono bg-[#000000]/50 p-1.5 rounded border border-white/10 w-fit">
                   <MapPin size={12} className="text-emerald-500" />
                   {incident.district ? `${incident.district}, ${incident.state}` : 'Unknown Location'}
-                  <span className="text-slate-600">|</span>
+                  <span className="text-gray-600">|</span>
                   {incident.lat.toFixed(4)}, {incident.lng.toFixed(4)}
               </div>
 
@@ -93,18 +93,24 @@ export default function AdminIncidentCard({ incident, onResolve, onDelete }) {
                   </div>
               )}
 
-              <div className="mt-auto pt-3 border-t border-slate-700 flex gap-2 justify-end">
+              <div className="mt-auto pt-3 border-t border-white/10 flex gap-2 justify-end relative z-50 pointer-events-auto">
                   {!isResolved && (
                       <button 
-                          onClick={() => onResolve(incident.id)}
-                          className="flex items-center gap-2 px-3 py-1.5 bg-emerald-600 text-white text-sm font-medium rounded hover:bg-emerald-500 transition shadow-lg shadow-emerald-900/20"
+                          onClick={(e) => {
+                              e.stopPropagation();
+                              onResolve(incident.id);
+                          }}
+                          className="flex items-center gap-2 px-3 py-1.5 bg-emerald-600 text-white text-sm font-medium rounded hover:bg-emerald-500 transition shadow-lg shadow-emerald-900/20 cursor-pointer text-center select-none"
                       >
                           <CheckCircle size={16} /> Mark Resolved
                       </button>
                   )}
                   <button 
-                      onClick={() => onDelete(incident.id)}
-                      className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 text-red-400 text-sm font-medium rounded hover:bg-red-950/30 transition border border-red-900/30 hover:border-red-900/50"
+                      onClick={(e) => {
+                          e.stopPropagation();
+                          onDelete(incident.id);
+                      }}
+                      className="flex items-center gap-2 px-3 py-1.5 bg-[#0a0a0a]/80 text-red-400 text-sm font-medium rounded hover:bg-red-950/30 transition border border-red-900/30 hover:border-red-900/50 cursor-pointer text-center select-none"
                   >
                       <Trash2 size={16} /> Delete
                   </button>

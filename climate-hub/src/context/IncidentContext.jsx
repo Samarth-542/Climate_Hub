@@ -51,12 +51,24 @@ export function IncidentProvider({ children }) {
 
     if (filters.type !== 'All' && item.type !== filters.type) return false;
 
+    if (filters.state && filters.state !== '' && item.state !== filters.state) return false;
+    if (filters.district && filters.district !== '' && item.district !== filters.district) return false;
+
     if (filters.date === 'Today') {
       if (!isAfter(itemDate, startOfDay(new Date()))) return false;
     } else if (filters.date === '24h') {
       if (!isAfter(itemDate, subHours(new Date(), 24))) return false;
     } else if (filters.date === '7d') {
       if (!isAfter(itemDate, subDays(new Date(), 7))) return false;
+    }
+
+    if (filters.search && filters.search.trim() !== '') {
+        const term = filters.search.toLowerCase();
+        const matchesType = item.type?.toLowerCase().includes(term);
+        const matchesDesc = item.description?.toLowerCase().includes(term);
+        const matchesLoc = item.district?.toLowerCase().includes(term) || item.state?.toLowerCase().includes(term);
+        
+        if (!matchesType && !matchesDesc && !matchesLoc) return false;
     }
 
     return true;

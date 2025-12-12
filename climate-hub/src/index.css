@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  background-color: #0f172a;
-  /* Slate 900 */
+  background-color: #000000;
+  /* Black */
   color: #f8fafc;
   /* Slate 50 */
 }
@@ -13,7 +13,9 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #0f172a;
+  background-color: #000000;
+  background-image: radial-gradient(circle at 50% 0%, #064e3b 0%, #000000 40%);
+  background-attachment: fixed;
 }
 
 .leaflet-container {
@@ -30,6 +32,8 @@ body {
   bottom: 24px !important;
   right: 24px !important;
 }
+
+/* Dark mode map style removed */
 
 /* Custom scrollbar for webkit */
 ::-webkit-scrollbar {
