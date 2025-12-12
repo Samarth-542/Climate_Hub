@@ -8,10 +8,10 @@ export default function AdminIncidentCard({ incident, onResolve, onDelete }) {
   const isResolved = incident.status === 'Resolved';
 
   return (
-    <div className={clsx("bg-white text-slate-900 rounded-xl overflow-hidden shadow-sm border", isResolved ? "border-green-200 bg-green-50" : "border-slate-200")}>
+    <div className={clsx("bg-slate-800 text-slate-200 rounded-xl overflow-hidden shadow-sm border", isResolved ? "border-emerald-900/50 bg-emerald-900/10" : "border-slate-700")}>
       <div className="flex h-full">
         {/* Mini Map Preview */}
-        <div className="w-48 h-full flex-none relative bg-slate-100 hidden sm:block">
+        <div className="w-48 h-full flex-none relative bg-slate-900 hidden sm:block grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition duration-500">
             <MapContainer 
                 center={[incident.lat, incident.lng]} 
                 zoom={13} 
@@ -30,17 +30,17 @@ export default function AdminIncidentCard({ incident, onResolve, onDelete }) {
             <div className="flex justify-between items-start">
                 <div>
                      <span className={clsx("text-xs font-bold px-2 py-1 rounded uppercase tracking-wider", {
-                        'bg-red-100 text-red-700': incident.severity === 'Critical',
-                        'bg-orange-100 text-orange-700': incident.severity === 'High',
-                        'bg-yellow-100 text-yellow-700': incident.severity === 'Medium',
-                        'bg-green-100 text-green-700': incident.severity === 'Low',
+                        'bg-red-900/30 text-red-400': incident.severity === 'Critical',
+                        'bg-orange-900/30 text-orange-400': incident.severity === 'High',
+                        'bg-yellow-900/30 text-yellow-400': incident.severity === 'Medium',
+                        'bg-emerald-900/30 text-emerald-400': incident.severity === 'Low',
                      })}>
                         {incident.severity} {incident.type}
                      </span>
-                     <h3 className="text-lg font-bold mt-2 line-clamp-1">{incident.description}</h3>
+                     <h3 className="text-lg font-bold mt-2 line-clamp-1 text-slate-100">{incident.description}</h3>
                 </div>
                 {isResolved && (
-                    <span className="flex items-center gap-1 text-green-600 font-bold text-xs bg-green-100 px-2 py-1 rounded-full">
+                    <span className="flex items-center gap-1 text-emerald-400 font-bold text-xs bg-emerald-900/30 px-2 py-1 rounded-full border border-emerald-900/50">
                         <CheckCircle size={14} /> Resolved
                     </span>
                 )}
@@ -67,18 +67,18 @@ export default function AdminIncidentCard({ incident, onResolve, onDelete }) {
                 </div>
             )}
 
-            <div className="mt-auto pt-3 border-t flex gap-2 justify-end">
+            <div className="mt-auto pt-3 border-t border-slate-700 flex gap-2 justify-end">
                 {!isResolved && (
                     <button 
                         onClick={() => onResolve(incident.id)}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-emerald-600 text-white text-sm font-medium rounded hover:bg-emerald-700 transition"
+                        className="flex items-center gap-2 px-3 py-1.5 bg-emerald-600 text-white text-sm font-medium rounded hover:bg-emerald-500 transition shadow-lg shadow-emerald-900/20"
                     >
                         <CheckCircle size={16} /> Mark Resolved
                     </button>
                 )}
                 <button 
                     onClick={() => onDelete(incident.id)}
-                    className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 text-red-600 text-sm font-medium rounded hover:bg-red-50 transition border border-red-100"
+                    className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 text-red-400 text-sm font-medium rounded hover:bg-red-950/30 transition border border-red-900/30 hover:border-red-900/50"
                 >
                     <Trash2 size={16} /> Delete
                 </button>
