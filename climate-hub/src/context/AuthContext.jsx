@@ -17,14 +17,14 @@ export function AuthProvider({ children }) {
 
   // Step 1: Request OTP (Mock)
   const requestOTP = async (phone) => {
-    // In a real app, this would call an API
-    const mockOtp = Math.floor(100000 + Math.random() * 900000).toString();
-    console.log(`[MOCK OTP] for ${phone}: ${mockOtp}`);
-    
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 800));
     
-    // Return mock OTP to component so it can alert the user (since we have no backend)
+    // Generate Mock OTP
+    const mockOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    console.log(`[MOCK OTP] for ${phone}: ${mockOtp}`);
+    
+    // Return mock OTP to component so it can alert the user
     return mockOtp;
   };
 

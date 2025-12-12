@@ -36,6 +36,7 @@ export const incidentStore = {
         {
           id: '1',
           type: 'Flood',
+          severity: 'Critical',
           description: 'Heavy flooding observed near the river bank. Water levels rising rapidly.',
           lat: 51.505,
           lng: -0.09,
@@ -44,6 +45,7 @@ export const incidentStore = {
         {
           id: '2',
           type: 'Heatwave',
+          severity: 'High',
           description: 'Extreme heat warning in effect. Temperature recorded at 42°C.',
           lat: 48.8566,
           lng: 2.3522,
@@ -52,6 +54,7 @@ export const incidentStore = {
         {
           id: '3',
           type: 'Storm',
+          severity: 'Medium',
           description: 'Severe thunderstorm with high winds causing tree damage.',
           lat: 40.7128,
           lng: -74.0060,

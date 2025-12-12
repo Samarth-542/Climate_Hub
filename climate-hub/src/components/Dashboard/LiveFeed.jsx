@@ -7,13 +7,12 @@ import clsx from 'clsx';
 export default function LiveFeed({ onViewOnMap }) {
   const { filteredIncidents } = useIncidents();
 
-  const getTypeColor = (type) => {
-    switch (type) {
-      case 'Flood': return 'text-blue-400 bg-blue-400/10 border-blue-400/20';
-      case 'Heatwave': return 'text-red-400 bg-red-400/10 border-red-400/20';
-      case 'Drought': return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20';
-      case 'Wildfire': return 'text-orange-400 bg-orange-400/10 border-orange-400/20';
-      case 'Storm': return 'text-indigo-400 bg-indigo-400/10 border-indigo-400/20';
+  const getSeverityColor = (severity) => {
+    switch (severity) {
+      case 'Critical': return 'text-red-400 bg-red-400/10 border-red-400/20';
+      case 'High': return 'text-orange-400 bg-orange-400/10 border-orange-400/20';
+      case 'Medium': return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20';
+      case 'Low': return 'text-green-400 bg-green-400/10 border-green-400/20';
       default: return 'text-slate-400 bg-slate-400/10 border-slate-400/20';
     }
   };
@@ -45,8 +44,8 @@ export default function LiveFeed({ onViewOnMap }) {
               className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 hover:border-emerald-500/30 hover:bg-slate-800 transition-all group"
             >
               <div className="flex items-start justify-between mb-2">
-                <span className={clsx("text-xs px-2 py-1 rounded-full border font-medium", getTypeColor(incident.type))}>
-                  {incident.type}
+                <span className={clsx("text-xs px-2 py-1 rounded-full border font-medium", getSeverityColor(incident.severity))}>
+                  {incident.type} • {incident.severity || 'Unknown'}
                 </span>
                 <span className="text-[10px] text-slate-500 flex items-center gap-1">
                   <Clock size={10} />
