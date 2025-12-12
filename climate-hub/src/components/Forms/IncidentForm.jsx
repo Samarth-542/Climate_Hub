@@ -17,6 +17,10 @@ export default function IncidentForm() {
     severity: 'Medium',
     description: '',
     photo: '',
+    district: '',
+    state: '',
+    reportedBy: '',
+    phone: ''
   });
   const [location, setLocation] = useState(null);
 
@@ -100,6 +104,30 @@ export default function IncidentForm() {
                     value={formData.description}
                     onChange={e => setFormData({...formData, description: e.target.value})}
                 />
+            </div>
+
+            {/* Reporter Details */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                   <label className="block text-sm font-semibold text-slate-300 mb-2">Your Name (Optional)</label>
+                   <input 
+                        type="text"
+                        className="w-full p-3 bg-slate-800 border border-slate-700 text-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none placeholder:text-slate-500"
+                        placeholder="John Doe"
+                        value={formData.reportedBy || ''}
+                        onChange={e => setFormData({...formData, reportedBy: e.target.value})}
+                   />
+                </div>
+                <div>
+                   <label className="block text-sm font-semibold text-slate-300 mb-2">Phone Number (Optional)</label>
+                   <input 
+                        type="tel"
+                        className="w-full p-3 bg-slate-800 border border-slate-700 text-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none placeholder:text-slate-500"
+                        placeholder="+91 9876543210"
+                        value={formData.phone || ''}
+                        onChange={e => setFormData({...formData, phone: e.target.value})}
+                   />
+                </div>
             </div>
 
             {/* Location */}

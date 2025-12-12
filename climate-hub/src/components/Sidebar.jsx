@@ -70,6 +70,9 @@ export default function Sidebar() {
              <div className="bg-slate-800/50 rounded-lg p-4 text-xs text-slate-400">
                 <p className="font-semibold text-slate-300 mb-1">Status: Guest</p>
                 <p>Login to submit reports.</p>
+                <NavLink to="/admin/login" className="block mt-3 text-emerald-500 hover:text-emerald-400 font-medium transition">
+                    Admin Portal &rarr;
+                </NavLink>
              </div>
         )}
       </div>
