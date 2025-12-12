@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '../UI/ToastContext';
 import LocationPicker from './LocationPicker';
 import { useIncidents } from '../../context/IncidentContext';
+import { statesAndDistricts } from '../../data/statesAndDistricts';
 import { ArrowLeft, Send, Camera } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -127,6 +128,37 @@ export default function IncidentForm() {
                         value={formData.phone || ''}
                         onChange={e => setFormData({...formData, phone: e.target.value})}
                    />
+                </div>
+            </div>
+
+            {/* Location Details (State/District) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-sm font-semibold text-slate-300 mb-2">State</label>
+                    <select 
+                        className="w-full p-3 bg-slate-800 border border-slate-700 text-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"
+                        value={formData.state}
+                        onChange={e => setFormData({...formData, state: e.target.value, district: ''})}
+                    >
+                        <option value="">Select State</option>
+                        {Object.keys(statesAndDistricts).sort().map(s => (
+                            <option key={s} value={s}>{s}</option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <label className="block text-sm font-semibold text-slate-300 mb-2">District</label>
+                    <select 
+                        className="w-full p-3 bg-slate-800 border border-slate-700 text-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none disabled:opacity-50"
+                        value={formData.district}
+                        onChange={e => setFormData({...formData, district: e.target.value})}
+                        disabled={!formData.state}
+                    >
+                        <option value="">Select District</option>
+                        {formData.state && statesAndDistricts[formData.state]?.sort().map(d => (
+                            <option key={d} value={d}>{d}</option>
+                        ))}
+                    </select>
                 </div>
             </div>
 

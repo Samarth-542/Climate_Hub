@@ -4,44 +4,7 @@ const adminAuth = require("../middleware/adminAuth");
 const crypto = require("crypto");
 
 // In-Memory Store (Shared)
-let incidents = [
-  {
-    id: '1',
-    type: 'Flood',
-    severity: 'Critical',
-    description: 'Heavy flooding observed near the river bank. Water levels rising rapidly.',
-    lat: 51.505,
-    lng: -0.09,
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-    reportedBy: 'System',
-    phone: 'N/A',
-    status: 'Open'
-  },
-  {
-    id: '2',
-    type: 'Heatwave',
-    severity: 'High',
-    description: 'Extreme heat warning in effect. Temperature recorded at 42°C.',
-    lat: 48.8566,
-    lng: 2.3522,
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
-    reportedBy: 'System',
-    phone: 'N/A',
-    status: 'Open'
-  },
-  {
-    id: '3',
-    type: 'Storm',
-    severity: 'Medium',
-    description: 'Severe thunderstorm with high winds causing tree damage.',
-    lat: 40.7128,
-    lng: -74.0060,
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString(),
-    reportedBy: 'System',
-    phone: 'N/A',
-    status: 'Resolved'
-  }
-];
+let incidents = [];
 
 // --- PUBLIC ROUTES ---
 
@@ -52,7 +15,7 @@ router.get("/incidents", (req, res) => {
 
 // Report Incident
 router.post("/incidents", (req, res) => {
-  const { type, severity, description, lat, lng, photo, district, reportedBy, phone } = req.body;
+  const { type, severity, description, lat, lng, photo, district, state, reportedBy, phone } = req.body;
 
   if (!type || !description || !lat || !lng) {
     return res.status(400).json({ error: "Missing required fields" });
@@ -67,6 +30,7 @@ router.post("/incidents", (req, res) => {
     lng,
     photo: photo || null,
     district: district || 'Unknown',
+    state: state || 'Unknown',
     reportedBy: reportedBy || 'Anonymous',
     phone: phone || 'N/A',
     status: 'Open',

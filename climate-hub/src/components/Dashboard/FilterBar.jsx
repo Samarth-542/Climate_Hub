@@ -1,10 +1,19 @@
-import React from 'react';
-import { SlidersHorizontal, BarChart3 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { SlidersHorizontal, Search } from 'lucide-react';
 
 export default function FilterBar({ filters, setFilters }) {
+  // Local state for pending filters
+  const [localFilters, setLocalFilters] = useState({
+    type: filters.type,
+    date: filters.date
+  });
+
   const handleChange = (key, value) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setLocalFilters(prev => ({ ...prev, [key]: value }));
+  };
+
+  const applyFilters = () => {
+    setFilters(prev => ({ ...prev, type: localFilters.type, date: localFilters.date }));
   };
 
   return (
@@ -18,7 +27,7 @@ export default function FilterBar({ filters, setFilters }) {
 
           <select 
             className="bg-slate-800 border-none text-slate-200 text-sm rounded-lg focus:ring-2 focus:ring-emerald-500 block p-2 outline-none cursor-pointer hover:bg-slate-700 transition-colors"
-            value={filters.type}
+            value={localFilters.type}
             onChange={(e) => handleChange('type', e.target.value)}
           >
             <option value="All">All Types</option>
@@ -33,7 +42,7 @@ export default function FilterBar({ filters, setFilters }) {
 
           <select 
             className="bg-slate-800 border-none text-slate-200 text-sm rounded-lg focus:ring-2 focus:ring-emerald-500 block p-2 outline-none cursor-pointer hover:bg-slate-700 transition-colors"
-            value={filters.date}
+            value={localFilters.date}
             onChange={(e) => handleChange('date', e.target.value)}
           >
             <option value="All">All Time</option>
@@ -41,6 +50,15 @@ export default function FilterBar({ filters, setFilters }) {
             <option value="24h">Last 24 Hours</option>
             <option value="7d">Last 7 Days</option>
           </select>
+
+          {/* Search Button (Apply Filters) */}
+          <button 
+             onClick={applyFilters}
+             className="bg-emerald-600 hover:bg-emerald-500 text-white p-2 rounded-lg transition-all shadow-lg shadow-emerald-900/20 active:scale-95 flex items-center justify-center"
+             title="Apply Filters"
+          >
+             <Search size={18} />
+          </button>
        </div>
     </div>
   );
