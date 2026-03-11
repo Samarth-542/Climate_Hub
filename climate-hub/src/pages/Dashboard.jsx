@@ -4,7 +4,6 @@ import { LayoutDashboard, FileText, BarChart3, Search as SearchIcon } from "luci
 import { AdvancedMap } from "../components/ui/InteractiveMap";
 import LightRays from "../components/ui/LightRays";
 import LiveFeed from "../components/Dashboard/LiveFeed";
-import SearchBar from "../components/Dashboard/SearchBar";
 import { useIncidents } from "../context/IncidentContext";
 import clsx from "clsx";
 
@@ -39,16 +38,6 @@ export default function Dashboard() {
              className="opacity-30"
           />
       </div>
-
-      {/* Horizontal Top Navbar */}
-      <header className="relative z-30 bg-[#050505]/80 backdrop-blur-xl border-b border-emerald-500/10 py-3 px-6">
-        <div className="flex items-center justify-center">
-          {/* Search Bar - Centered */}
-          <div className="w-full max-w-xl mx-auto">
-             <SearchBar />
-          </div>
-        </div>
-      </header>
 
       {/* Main Content: Map + Feed */}
       <div className="flex flex-1 relative overflow-hidden">
